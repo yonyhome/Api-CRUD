@@ -1,0 +1,27 @@
+version: '3'
+services:
+  crud_prueba:
+    container_name: crud_prueba
+    build: ./
+    restart: always
+    depends_on:
+      - postgres_ss
+  postgres_ss:
+    container_name: postgres_ss
+    image: postgres
+    ports:
+      - "5431:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin1234
+      POSTGRES_DB: shopping
+  nginx:
+      image: nginx
+      container_name: reverse-proxy_ss
+      restart: always
+      ports:
+        - 80:80
+      volumes:
+        - ./nginx:/etc/nginx/conf.d
+      links:
+        - crud_prueba
